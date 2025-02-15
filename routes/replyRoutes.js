@@ -1,4 +1,4 @@
 const express = require("express");
-const userController = require("../controllers/userController");
+const replyController = require("../controllers/replyController");
 const router = express.Router();
 module.exports = router;
