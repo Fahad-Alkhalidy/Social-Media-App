@@ -1,5 +1,6 @@
 const express = require("express");
 const morgan = require("morgan");
+const cors = require("cors");
 
 const AppError = require("./utils/appError");
 const userRoutes = require("./routes/userRoutes");
@@ -20,7 +21,7 @@ const savedPostRoutes = require("./routes/savedPostRoutes");
 const storyRoutes = require("./routes/storyRoutes");
 
 const app = express();
-
+app.use(cors());
 //Middlewares:
 if (process.env.NODE_ENV === "development") app.use(morgan("dev"));
 app.use(express.json({ limit: "10kb" }));
