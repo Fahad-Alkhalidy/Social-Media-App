@@ -15,6 +15,7 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: [true, "The password is required"],
+    select: false,
   },
   passwordConfirm: {
     type: String,
@@ -58,6 +59,11 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
+  active: {
+    type: Boolean,
+    default: true,
+    select: false,
+  },
 });
 
 userSchema.pre("save", async function (next) {
@@ -69,6 +75,17 @@ userSchema.pre("save", async function (next) {
   this.passwordConfirm = undefined;
   next();
 });
+
+userSchema.methods.correctPassword = async function (
+  userRealPassword,
+  userEnteredPassword
+) {
+  try {
+    return await bcrypt.compare(userEnteredPassword, userRealPassword);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 const User = mongoose.model("User", userSchema);
 module.exports = User;
