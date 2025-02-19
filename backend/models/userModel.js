@@ -43,6 +43,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
+  role: {
+    type: String,
+    enum: ["user", "admin"],
+    default: "user",
+  },
   friends: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -64,6 +69,7 @@ const userSchema = new mongoose.Schema({
     default: true,
     select: false,
   },
+  passwordChangedAt: Date,
 });
 
 userSchema.pre("save", async function (next) {
@@ -85,6 +91,15 @@ userSchema.methods.correctPassword = async function (
   } catch (error) {
     console.log(error);
   }
+};
+
+userSchema.methods.changedPasswordAfter = async function (JWTTimeStamp) {
+  if (this.passwordChangedAt) {
+    const changeTime = parseInt(this.passwordChangedAt.getTime() / 1000, 10);
+    return changeTime > JWTTimeStamp;
+  }
+  //password did not change
+  return false;
 };
 
 const User = mongoose.model("User", userSchema);

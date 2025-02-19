@@ -1,3 +1,4 @@
+import "../App.css";
 const Home: React.FC = () => {
   return (
     <div className="main">
@@ -5,11 +6,7 @@ const Home: React.FC = () => {
         <div className="navbar bg-base-100 shadow-sm">
           <div className="flex-1">
             <div className="flex">
-              <img
-                src="../assets/logo.png"
-                className="w-5 h-auto"
-                alt="no image"
-              ></img>
+              <div className="logo-image w-20 h-auto"></div>
               <a className="btn btn-ghost text-xl mr-10">talkybox</a>
 
               <div className="drawer">
@@ -24,10 +21,10 @@ const Home: React.FC = () => {
                     htmlFor="my-drawer"
                     className="btn btn-primary drawer-button"
                   >
-                    Open drawer
+                    Show Followed Pages
                   </label>
                 </div>
-                <div className="drawer-side">
+                <div className="drawer-side z-1">
                   <label
                     htmlFor="my-drawer"
                     aria-label="close sidebar"

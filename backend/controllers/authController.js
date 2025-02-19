@@ -95,3 +95,66 @@ exports.login = catchAsync(async (req, res, next) => {
   //create a token if everything went seccessful
   createSendToken(user, 200, res);
 });
+
+exports.logout = catchAsync(async (req, res, next) => {
+  res.cookie("jwt", "logout", {
+    expires: new Date(Date.now() * 10 * 1000),
+    httpOnly: true,
+  });
+  res.status(200).json({
+    status: "success",
+  });
+});
+
+exports.protect = catchAsync(async (req, res, next) => {
+  //get the token from the header or the cookie
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startWith("Bearer")
+  ) {
+    token = req.headers.authorization.split(" ")[1];
+  } else if (req.cookie.jwt) {
+    token = req.cookie.jwt;
+  }
+  //check if logged in or not
+  if (!token) {
+    return next(
+      new AppError("You are not logged in! Please log in to get access", 401)
+    );
+  }
+  //verify the token
+  const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+  //check if the user with this token exist:
+  const user = await User.findById(decoded.id);
+  if (!user)
+    return next(
+      new AppError(
+        "The user belonging to this token does no longer exist!",
+        401
+      )
+    );
+  //check if the user changed the password after the token was issued
+  if (user.changedPasswordAfter(decoded.iat)) {
+    return next(
+      new AppError(
+        "The user belonging to this token has recently changed his password, Please login again!",
+        401
+      )
+    );
+  }
+  //give access to the user:
+  req.user = user;
+  res.locals.user = user;
+  next();
+});
+
+exports.restrictTo = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      next(
+        new AppError("You are restricted from accessing this endpoint", 403)
+      );
+    }
+    next();
+  };
+};
