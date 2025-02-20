@@ -10,5 +10,5 @@ exports.createUser = (req, res) => {
 };
 
 exports.getUser = factory.getOne(User);
-exports.deleteUser = factory.DeleteUser(User);
+exports.deleteUser = factory.deleteOne(User);
 exports.updateUser = factory.updateOne(User);

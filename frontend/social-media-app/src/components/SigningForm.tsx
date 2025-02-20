@@ -2,7 +2,8 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import InputField from "./InputField";
 import Loading from "./Loading";
-import { LoginFormData, SignupFormData } from "./formType";
+import { LoginFormData, SignupFormData } from "../Typescript Types/formType";
+import storeIdInLocalStorage from "../storeInLocalStorage";
 
 interface SigningFormProps {
   formType: LoginFormData | SignupFormData;
@@ -50,6 +51,7 @@ const SigningForm: React.FC<SigningFormProps> = ({ formType, type }) => {
         body: JSON.stringify(formData),
       });
       const result = await response.json();
+      storeIdInLocalStorage(result.data.user._id);
       if (response.ok) {
         alert(`${type.charAt(0).toUpperCase() + type.slice(1)} Succussful!`);
         navigate("/");

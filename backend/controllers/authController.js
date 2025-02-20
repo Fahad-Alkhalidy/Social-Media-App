@@ -113,8 +113,8 @@ exports.protect = catchAsync(async (req, res, next) => {
     req.headers.authorization.startWith("Bearer")
   ) {
     token = req.headers.authorization.split(" ")[1];
-  } else if (req.cookie.jwt) {
-    token = req.cookie.jwt;
+  } else if (req.cookies.jwt) {
+    token = req.cookies.jwt;
   }
   //check if logged in or not
   if (!token) {
@@ -125,7 +125,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   //verify the token
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
   //check if the user with this token exist:
-  const user = await User.findById(decoded.id);
+  const user = await User.findById(decoded.userId);
   if (!user)
     return next(
       new AppError(
