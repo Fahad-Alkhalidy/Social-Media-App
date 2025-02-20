@@ -8,6 +8,13 @@ router.post("/login", authController.login);
 //Protect all routes after this middleware (only authorized people will have access)
 router.use(authController.protect);
 
+router
+  .route("/:id")
+  .patch(
+    userController.uploadUserPersonalPhoto,
+    userController.resizeUserPersonalPhoto,
+    userController.updateMe
+  );
 //Restericted to admins:
 //router.use(authController.restrictTo("admin"))
 

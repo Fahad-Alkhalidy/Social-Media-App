@@ -32,6 +32,14 @@ exports.resizeUserPersonalPhoto = catchAsync(async (req, res, next) => {
     .toFile(`public/image/users/${req.file.fileName}`);
   next();
 });
+//Filtering the req.body of the user when he tries to update:
+const filterObj = (obj, ...fieldsUserCanUpdate) => {
+  const newObj = {};
+  Object.keys(obj).forEach((el) => {
+    if (fieldsUserCanUpdate.includes(el)) newObj[el] = obj[el];
+  });
+  return newObj;
+};
 //routes available for users:
 exports.updateMe = (req, res, next) => {
   //check if the user is trying to update his password from this path so an error gets thrown
@@ -44,19 +52,20 @@ exports.updateMe = (req, res, next) => {
     );
   }
   //filtering fields that are not allowed to be updated:
-  const filterBody;
+  const filterBody = filterObj(req.body, "username", "email");
+  if (req.file) filterBody.photo = req.file.fileName;
   //update user document:
   const updatedUser = User.findByIdAndUpdate(req.user.id, filterBody, {
     new: true,
     runValidators: true,
-  })
+  });
   //send a response:
   res.status(201).json({
-    status: 'success',
+    status: "success",
     data: {
-      user: updatedUser
-    }
-  })
+      user: updatedUser,
+    },
+  });
 };
 //The user document can be only created using the /signup route (only)
 multer.exports.createUser = (req, res) => {
