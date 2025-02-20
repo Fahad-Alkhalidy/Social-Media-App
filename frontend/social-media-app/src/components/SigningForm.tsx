@@ -111,3 +111,4 @@ const SigningForm: React.FC<SigningFormProps> = ({ formType, type }) => {
 };
 
 export default SigningForm;
+/* eslint no-use-before-define: 0 */

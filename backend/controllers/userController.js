@@ -1,8 +1,65 @@
+const multer = require("multer");
 const User = require("../models/userModel");
 const factory = require("./handlerFactory");
+const catchAsync = require("../utils/catchAsync");
+const sharp = require("sharp");
+const AppError = require("../utils/appError");
 
+//File Uploading:
+const multerStorage = multer.memoryStorage();
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.startWith("image")) {
+    cb(null, true);
+  } else {
+    return next(
+      new AppError("The file uploaded must only be an image!", 400),
+      false
+    );
+  }
+};
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter,
+});
+exports.uploadUserPersonalPhoto = upload.single("photo");
+exports.resizeUserPersonalPhoto = catchAsync(async (req, res, next) => {
+  if (!req.file) return next();
+  req.file.fileName = `user-${req.user.id}-${Date.now()}.jpeg`;
+  await sharp(req.file.buffer)
+    .resize(500, 500)
+    .toFormat("jpeg")
+    .jpeg({ quality: 90 })
+    .toFile(`public/image/users/${req.file.fileName}`);
+  next();
+});
+//routes available for users:
+exports.updateMe = (req, res, next) => {
+  //check if the user is trying to update his password from this path so an error gets thrown
+  if (req.body.password || req.body.confirmPassword) {
+    return next(
+      new AppError(
+        "This route is not used to update password! Please use this route: /updateMyPassword",
+        400
+      )
+    );
+  }
+  //filtering fields that are not allowed to be updated:
+  const filterBody;
+  //update user document:
+  const updatedUser = User.findByIdAndUpdate(req.user.id, filterBody, {
+    new: true,
+    runValidators: true,
+  })
+  //send a response:
+  res.status(201).json({
+    status: 'success',
+    data: {
+      user: updatedUser
+    }
+  })
+};
 //The user document can be only created using the /signup route (only)
-exports.createUser = (req, res) => {
+multer.exports.createUser = (req, res) => {
   res.status(500).json({
     status: "error",
     message: "this route is not defined, please use /signup",
