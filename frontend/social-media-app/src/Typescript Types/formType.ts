@@ -10,3 +10,15 @@ export interface SignupFormData {
   password: string;
   passwordConfirm: string;
 }
+
+export interface UpdateUserDataForm {
+  username: string;
+  email: string;
+  profilePicture?: File | null;
+}
+
+export const UpdateUserDataFormDefault: UpdateUserDataForm = {
+  username: "",
+  email: "",
+  profilePicture: null,
+};

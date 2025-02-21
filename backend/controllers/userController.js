@@ -41,7 +41,7 @@ const filterObj = (obj, ...fieldsUserCanUpdate) => {
   return newObj;
 };
 //routes available for users:
-exports.updateMe = (req, res, next) => {
+exports.updateMe = async (req, res, next) => {
   //check if the user is trying to update his password from this path so an error gets thrown
   if (req.body.password || req.body.confirmPassword) {
     return next(
@@ -55,12 +55,12 @@ exports.updateMe = (req, res, next) => {
   const filterBody = filterObj(req.body, "username", "email");
   if (req.file) filterBody.photo = req.file.fileName;
   //update user document:
-  const updatedUser = User.findByIdAndUpdate(req.user.id, filterBody, {
+  const updatedUser = await User.findByIdAndUpdate(req.user.id, filterBody, {
     new: true,
     runValidators: true,
   });
   //send a response:
-  res.status(201).json({
+  res.status(200).json({
     status: "success",
     data: {
       user: updatedUser,
@@ -68,7 +68,7 @@ exports.updateMe = (req, res, next) => {
   });
 };
 //The user document can be only created using the /signup route (only)
-multer.exports.createUser = (req, res) => {
+exports.createUser = (req, res) => {
   res.status(500).json({
     status: "error",
     message: "this route is not defined, please use /signup",
