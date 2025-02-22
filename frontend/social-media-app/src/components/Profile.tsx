@@ -9,10 +9,12 @@ const Profile: React.FC = () => {
   const [profileData, setProfileData] = useState<profileDataTypes>(
     profileDataTypesDefault
   );
+  const formyData = new FormData();
+  const [file, setFile] = useState();
   const [formData, setFormData] = useState(UpdateUserDataFormDefault);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-
+  const [isDataFetched, setIsDataFetched] = useState<boolean>(false);
   //const JWTToken = getCookie("jwt");
 
   useEffect(() => {
@@ -44,7 +46,7 @@ const Profile: React.FC = () => {
       }
     };
     fetchUserData();
-  }, [formData]);
+  }, [isDataFetched]);
 
   const handleSubmission = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -54,16 +56,20 @@ const Profile: React.FC = () => {
     if (formData.profilePicture === null) delete submissionData.profilePicture;
     try {
       console.log(formData);
-      console.log(JSON.stringify(submissionData));
+      formyData.append("profilePicture", file);
       const response = await fetch(
         `/api/v1/users/${localStorage.getItem("id")}`,
         {
           method: "PATCH",
-          body: JSON.stringify(submissionData),
+
+          body: formyData,
         }
       );
       const result = await response.json();
       setProfileData(result.data.doc);
+      if (response.ok) {
+        setIsDataFetched(true);
+      }
     } catch (error) {
       console.log(error);
       setError("Something went wrong");
@@ -106,7 +112,7 @@ const Profile: React.FC = () => {
                     id="profilePicture"
                     type="file"
                     className="file-input file-input-primary"
-                    onChange={handleChange}
+                    onChange={(e) => setFile(e.target.files[0])}
                     name="profilePicture"
                   />
                   <input

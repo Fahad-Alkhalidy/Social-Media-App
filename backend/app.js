@@ -20,10 +20,13 @@ const reportRoutes = require("./routes/reportRoutes");
 const savedPostRoutes = require("./routes/savedPostRoutes");
 const storyRoutes = require("./routes/storyRoutes");
 const cookieParser = require("cookie-parser");
-
+const bodyParser = require("body-parser");
+//const connectBusboy = require("connect-busboy");
 const app = express();
 app.use(cookieParser());
-//app.use(cors());
+//app.use(bodyParser.json());
+//app.use(cors("*"));
+//app.use(connectBusboy());
 //Middlewares:
 if (process.env.NODE_ENV === "development") app.use(morgan("dev"));
 app.use(express.json({ limit: "10kb" }));

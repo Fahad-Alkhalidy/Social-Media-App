@@ -8,7 +8,7 @@ const AppError = require("../utils/appError");
 //File Uploading:
 const multerStorage = multer.memoryStorage();
 const multerFilter = (req, file, cb) => {
-  if (file.mimetype.startWith("image")) {
+  if (file.mimetype.startsWith("image")) {
     cb(null, true);
   } else {
     return next(
@@ -21,7 +21,7 @@ const upload = multer({
   storage: multerStorage,
   fileFilter: multerFilter,
 });
-exports.uploadUserPersonalPhoto = upload.single("photo");
+exports.uploadUserPersonalPhoto = upload.single("profilePicture");
 exports.resizeUserPersonalPhoto = catchAsync(async (req, res, next) => {
   if (!req.file) return next();
   req.file.fileName = `user-${req.user.id}-${Date.now()}.jpeg`;
@@ -53,7 +53,7 @@ exports.updateMe = async (req, res, next) => {
   }
   //filtering fields that are not allowed to be updated:
   const filterBody = filterObj(req.body, "username", "email");
-  if (req.file) filterBody.photo = req.file.fileName;
+  if (req.file) filterBody.profilePicture = req.file.fileName;
   //update user document:
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filterBody, {
     new: true,
