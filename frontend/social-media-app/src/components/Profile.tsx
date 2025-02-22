@@ -100,7 +100,11 @@ const Profile: React.FC = () => {
           {
             <div>
               <p>{profileData.coverPhoto}</p>
-              <p>{profileData.profilePicture}</p>
+              <img
+                height={50}
+                width={50}
+                src={`http://localhost:3000/image/users/${profileData.profilePicture}`}
+              />
               <p>{profileData.username}</p>
               <p>{profileData.email}</p>
               <p>{profileData.fullname}</p>

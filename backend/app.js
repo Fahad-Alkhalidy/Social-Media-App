@@ -24,6 +24,7 @@ const bodyParser = require("body-parser");
 //const connectBusboy = require("connect-busboy");
 const app = express();
 app.use(cookieParser());
+app.use(express.static("public"));
 //app.use(bodyParser.json());
 //app.use(cors("*"));
 //app.use(connectBusboy());
