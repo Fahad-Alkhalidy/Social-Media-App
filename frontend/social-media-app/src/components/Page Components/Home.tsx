@@ -1,4 +1,4 @@
-import "../App.css";
+import "../../Styling/App.css";
 const Home: React.FC = () => {
   return (
     <div className="main">

@@ -2,8 +2,8 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import InputField from "./InputField";
 import Loading from "./Loading";
-import { LoginFormData, SignupFormData } from "../Typescript Types/formType";
-import storeIdInLocalStorage from "../storeInLocalStorage";
+import { LoginFormData, SignupFormData } from "../../Typescript Types/formType";
+import storeIdInLocalStorage from "../../storeInLocalStorage";
 
 interface SigningFormProps {
   formType: LoginFormData | SignupFormData;

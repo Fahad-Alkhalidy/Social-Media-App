@@ -1,5 +1,5 @@
-import { LoginFormData } from "../Typescript Types/formType";
-import SigningForm from "./SigningForm";
+import { LoginFormData } from "../../Typescript Types/formType";
+import SigningForm from "../Functionality Component/SigningForm";
 
 const Login: React.FC = () => {
   const initialLoginData: LoginFormData = {
