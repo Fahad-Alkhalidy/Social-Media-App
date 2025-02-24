@@ -8,6 +8,15 @@ import {
   UpdateUserDataFormDefault,
 } from "../../Typescript Types/formType";
 import { useNavigate } from "react-router-dom";
+import Button from "../Functionality Component/Button";
+import FriendReq from "../Functionality Component/FriendReq";
+import {
+  IFriendRequestComponents,
+  IfriendRequestComponents,
+} from "../../Typescript Types/friendRequestType";
+import Loading from "../Functionality Component/Loading";
+const controller = new AbortController();
+const signal = controller.signal;
 //import getCookie from "./getJWTCookie";
 const Profile: React.FC = () => {
   const [profileData, setProfileData] = useState<profileDataTypes>(
@@ -20,7 +29,7 @@ const Profile: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [isDataFetched, setIsDataFetched] = useState<boolean>(false);
   //const JWTToken = getCookie("jwt");
-
+  //fetch the current user data:
   useEffect(() => {
     const fetchUserData = async () => {
       setLoading(true);
@@ -28,6 +37,7 @@ const Profile: React.FC = () => {
         const response = await fetch(
           `/api/v1/users/${localStorage.getItem("id")}`,
           {
+            signal,
             method: "GET",
             headers: {
               "Content-Type": "application/json",
@@ -43,6 +53,8 @@ const Profile: React.FC = () => {
           setError(result.message || "No data available for such user!");
         }
       } catch (error) {
+        if (error.name === "AbortError")
+          console.log("Fetch request was aborted");
         console.log(error);
         setError("Something went wrong");
       } finally {
@@ -101,10 +113,38 @@ const Profile: React.FC = () => {
   const handleBackButtonClick = () => {
     navigate("/");
   };
+
+  //fetch the friend requests:
+  const [allUserFriendRequests, setAllUserFriendRequests] =
+    useState<[{ IFriendRequestComponents }]>();
+
+  useEffect(() => {
+    const fetchUserReq = async () => {
+      try {
+        const response = await fetch(
+          `/api/v1/friendReqs/${localStorage.getItem("id")}`,
+          { signal }
+        );
+        const result = await response.json();
+
+        if (response.ok) {
+          setAllUserFriendRequests(result.data.userRequests);
+        } else {
+          throw "Error While Fetching";
+        }
+      } catch (error) {
+        if (error.name === "AbortError")
+          console.log("Fetch request was aborted");
+        console.log(error);
+      }
+    };
+    fetchUserReq();
+  }, []);
+  console.log(allUserFriendRequests);
   return (
     <div className="w-full">
       {/* Loading Indicator */}
-      <p className="text-center">{loading && "Loading..."}</p>
+      <p className="text-center">{loading ? <Loading /> : ""}</p>
 
       <div className="flex flex-col lg:flex-row gap-5 mt-5">
         {/* Followed Pages Section */}
@@ -178,20 +218,27 @@ const Profile: React.FC = () => {
                   name="email"
                   value={formData.email}
                 />
-                <button
-                  type="submit"
-                  className="mt-6 w-full rounded-md bg-indigo-600 px-3 py-2 text-white text-sm font-semibold shadow-md hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
-                >
-                  Submit
-                </button>
+                <Button>Submit</Button>
               </div>
             </form>
           </div>
         </div>
 
         {/* Additional Content Section */}
-        <div className="card bg-base-300 rounded-box flex justify-center items-center h-fit basis-1/3 p-5">
-          <p className="text-center text-lg font-medium">Content</p>
+        <div className="card bg-base-300 rounded-box flex flex-col justify-start items-center max-h-screen basis-1/3 overflow-y-scroll">
+          <p className="text-center text-lg font-medium mt-5">
+            Friend Requests
+          </p>
+          <div className="">
+            {allUserFriendRequests?.map(
+              (friendRequest: IfriendRequestComponents) => (
+                <FriendReq
+                  key={friendRequest._id}
+                  friendRequest={friendRequest}
+                />
+              )
+            )}
+          </div>
         </div>
       </div>
 

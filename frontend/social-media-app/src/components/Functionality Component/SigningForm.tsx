@@ -4,6 +4,7 @@ import InputField from "./InputField";
 import Loading from "./Loading";
 import { LoginFormData, SignupFormData } from "../../Typescript Types/formType";
 import storeIdInLocalStorage from "../../storeInLocalStorage";
+import Button from "./Button";
 
 interface SigningFormProps {
   formType: LoginFormData | SignupFormData;
@@ -91,7 +92,9 @@ const SigningForm: React.FC<SigningFormProps> = ({ formType, type }) => {
             ))}
             <div>
               {error && <p style={{ color: "red" }}>{error}</p>}
-              <Loading loading={loading} />
+              <Button>
+                {loading ? <Loading /> : type === "login" ? "Login" : "Signup"}
+              </Button>
             </div>
           </form>
 
