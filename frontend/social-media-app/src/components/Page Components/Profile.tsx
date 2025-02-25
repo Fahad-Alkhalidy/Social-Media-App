@@ -115,7 +115,7 @@ const Profile: React.FC = () => {
   };
 
   //fetch the friend requests:
-  const [allUserFriendRequests, setAllUserFriendRequests] =
+  let [allUserFriendRequests, setAllUserFriendRequests] =
     useState<[{ IFriendRequestComponents }]>();
 
   useEffect(() => {
@@ -140,6 +140,7 @@ const Profile: React.FC = () => {
     };
     fetchUserReq();
   }, []);
+
   console.log(allUserFriendRequests);
   return (
     <div className="w-full">

@@ -8,6 +8,8 @@ router.post("/login", authController.login);
 //Protect all routes after this middleware (only authorized people will have access)
 router.use(authController.protect);
 
+router.route("/").get(userController.getAllUsers);
+
 router
   .route("/:id")
   .patch(

@@ -1,5 +1,21 @@
 import "../../Styling/App.css";
+import { useState, useEffect } from "react";
+import { IUserType } from "../../Typescript Types/userType";
+import UserInfoBox from "../Functionality Component/userInfoBox";
 const Home: React.FC = () => {
+  const [fetchedUsers, setFetchedUsers] = useState<[{ IUserType }]>();
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch(`/api/v1/users/`);
+        const result = await response.json();
+        if (response.ok) setFetchedUsers(result.data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchUsers();
+  }, []);
   return (
     <div className="main">
       <div className="nav-bar">
@@ -128,8 +144,10 @@ const Home: React.FC = () => {
         </div>
       </div>
       <div className="flex w-full flex-col lg:flex-row h-dvh">
-        <div className="card bg-base-300 rounded-box grid h-32 grow place-items-center">
-          content
+        <div className="card bg-base-300 rounded-box flex flex-col flex-start overflow-y-scroll max-h-screen align-top">
+          {fetchedUsers?.map((user: IUserType) => (
+            <UserInfoBox User={user} />
+          ))}
         </div>
         <div className="divider lg:divider-horizontal">OR</div>
         <div className="card bg-base-300 rounded-box grid h-32 grow place-items-center">
