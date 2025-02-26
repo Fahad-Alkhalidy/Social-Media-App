@@ -2,7 +2,7 @@ export interface IUserType {
   _id: string;
   username: string;
   profilePicture: string;
-  bio: string;
+  bio?: string;
 }
 
 export interface IUser {

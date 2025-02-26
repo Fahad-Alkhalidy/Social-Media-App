@@ -15,6 +15,8 @@ import {
   IfriendRequestComponents,
 } from "../../Typescript Types/friendRequestType";
 import Loading from "../Functionality Component/Loading";
+import { IPost } from "../../Typescript Types/postType";
+import Post from "../Functionality Component/Post";
 const controller = new AbortController();
 const signal = controller.signal;
 //import getCookie from "./getJWTCookie";
@@ -115,7 +117,7 @@ const Profile: React.FC = () => {
   };
 
   //fetch the friend requests:
-  let [allUserFriendRequests, setAllUserFriendRequests] =
+  const [allUserFriendRequests, setAllUserFriendRequests] =
     useState<[{ IFriendRequestComponents }]>();
 
   useEffect(() => {
@@ -142,6 +144,25 @@ const Profile: React.FC = () => {
   }, []);
 
   console.log(allUserFriendRequests);
+
+  const [allUserPosts, setAllUserPosts] = useState<[{ IPost }]>();
+
+  useEffect(() => {
+    const fetchUserPosts = async () => {
+      try {
+        const response = await fetch(
+          `/api/v1/posts/${localStorage.getItem("id")}`
+        );
+        const result = await response.json();
+        if (response.ok) {
+          setAllUserPosts(result.data.userPosts);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchUserPosts();
+  }, []);
   return (
     <div className="w-full">
       {/* Loading Indicator */}
@@ -149,8 +170,14 @@ const Profile: React.FC = () => {
 
       <div className="flex flex-col lg:flex-row gap-5 mt-5">
         {/* Followed Pages Section */}
-        <div className="card bg-base-300 rounded-box flex justify-center items-center h-fit basis-1/3 p-5">
-          <h3 className="text-xl font-semibold">Followed Pages</h3>
+        <div className="card bg-base-300 rounded-box flex flex-col justify-start items-center max-h-screen overflow-y-scroll basis-1/3">
+          <div className="flex items-center justify-between mt-5 mb-5">
+            <h3 className="text-xl font-semibold">Posts</h3>
+            <Button>Create A New Post</Button>
+          </div>
+          {allUserPosts?.map((post) => (
+            <Post Post={post} />
+          ))}
           {/* Back Button */}
           <button
             onClick={handleBackButtonClick}
