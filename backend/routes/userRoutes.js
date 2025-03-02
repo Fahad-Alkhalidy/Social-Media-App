@@ -17,6 +17,11 @@ router
     userController.resizeUserPersonalPhoto,
     userController.updateMe
   );
+
+router
+  .route("/addAsFriend/:id")
+  .patch(userController.addAsFriend, userController.addAsFriendForReqSender);
+
 //Restericted to admins:
 //router.use(authController.restrictTo("admin"))
 

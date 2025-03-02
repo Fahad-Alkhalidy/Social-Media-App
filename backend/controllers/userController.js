@@ -78,3 +78,33 @@ exports.getAllUsers = factory.getAll(User);
 exports.getUser = factory.getOne(User);
 exports.deleteUser = factory.deleteOne(User);
 exports.updateUser = factory.updateOne(User);
+
+exports.addAsFriend = catchAsync(async (req, res, next) => {
+  const currentUserId = req.params.id;
+  await User.updateOne(
+    { _id: currentUserId },
+    {
+      $addToSet: {
+        //addToSet checks if it already exist before adding not like $push
+        friends: req.body.acceptedFriendId,
+      },
+    }
+  );
+  req.sender = currentUserId;
+  req.receiver = req.body.acceptedFriendId;
+  next();
+});
+
+exports.addAsFriendForReqSender = catchAsync(async (req, res, next) => {
+  await User.updateOne(
+    { _id: req.receiver },
+    {
+      $addToSet: {
+        friends: req.sender,
+      },
+    }
+  );
+  res.status(200).json({
+    status: "success",
+  });
+});
