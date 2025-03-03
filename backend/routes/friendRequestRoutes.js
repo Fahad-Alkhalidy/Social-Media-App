@@ -10,5 +10,8 @@ router
     friendRequestController.createAFriendRequest
   );
 //get Specific User Requests By receiver ID
-router.route("/:id").get(friendRequestController.getAllRequests);
+router
+  .route("/:id")
+  .get(friendRequestController.getAllRequests)
+  .delete(friendRequestController.deleteFriendRequest);
 module.exports = router;

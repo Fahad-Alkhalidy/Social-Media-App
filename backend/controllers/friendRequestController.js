@@ -24,3 +24,4 @@ exports.getAllRequests = catchAsync(async (req, res, next) => {
     },
   });
 });
+exports.deleteFriendRequest = factory.deleteOne(friendRequestModel);

@@ -28,7 +28,18 @@ const FriendReq: React.FC<IFriendRequest> = ({ friendRequest }) => {
     }
   };
   //Patch Request To Change The Status To Reject, and then remove req from UI
-  const Reject = () => {};
+  const Reject = async () => {
+    try {
+      const response = await fetch(`/api/v1/friendReqs/${friendRequest._id}`, {
+        method: "DELETE",
+      });
+      if (response.ok) {
+        console.log("deleted successfully");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="card bg-base-200 rounded-box w-full mb-5">
       <p>{`${friendRequest.sender.username} wants to be a friend with you!`}</p>
