@@ -1,3 +1,4 @@
+const User = require("../models/userModel");
 const APIFeatures = require("../utils/apiFeatures");
 const AppError = require("../utils/appError");
 const catchAsync = require("../utils/catchAsync");
@@ -21,15 +22,20 @@ exports.getOne = (Model, popOptions) => {
 };
 
 //did not complete yet, I will update it later after adding features to the API
-exports.getAll = (Model) => {
+exports.getAll = (Model, execlude) => {
   return catchAsync(async (req, res, next) => {
     let filter = {};
+    const execludedId = req.user._id.toString();
+    if (execlude) {
+      filter["_id"] = { $ne: execludedId };
+    }
     //I will create a nested get later on for some collections
     const features = new APIFeatures(Model.find(filter), req.query)
       .filter()
       .sort()
       .limitFields()
       .paginate();
+
     const doc = await features.query;
     res.status(200).json({
       status: "success",
