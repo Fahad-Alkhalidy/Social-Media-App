@@ -1,7 +1,7 @@
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
-
+const { app } = require("./socket/socket");
 const AppError = require("./utils/appError");
 const userRoutes = require("./routes/userRoutes");
 const blockRoutes = require("./routes/blockRoutes");
@@ -22,11 +22,10 @@ const storyRoutes = require("./routes/storyRoutes");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 //const connectBusboy = require("connect-busboy");
-const app = express();
 app.use(cookieParser());
 app.use(express.static("public"));
 //app.use(bodyParser.json());
-//app.use(cors("*"));
+app.use(cors("*"));
 //app.use(connectBusboy());
 //Middlewares:
 if (process.env.NODE_ENV === "development") app.use(morgan("dev"));

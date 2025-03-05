@@ -30,4 +30,6 @@ router
   .get(userController.getUser)
   .patch(userController.updateUser)
   .delete(userController.deleteUser);
+
+router.route("/getAllFriends/:id").get(userController.getAllFriends);
 module.exports = router;

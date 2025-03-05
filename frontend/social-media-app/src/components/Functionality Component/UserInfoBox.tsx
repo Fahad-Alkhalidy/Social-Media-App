@@ -17,11 +17,11 @@ const handleFollow = async (userId: string) => {
     console.log(error);
   }
 };
-const UserInfoBox: React.FC<IUser> = ({ User }) => {
+const UserInfoBox: React.FC<IUser> = ({ User, displayFollowButtonAndBio }) => {
   const userId = User._id;
   return (
     <div>
-      <div className="card card-dash bg-base-100 w-96">
+      <div className="card card-dash bg-base-100 w-96 hover:bg-gray-600">
         <div className="card-body">
           <img
             height={50}
@@ -30,15 +30,21 @@ const UserInfoBox: React.FC<IUser> = ({ User }) => {
             className="rounded-full border-4 border-indigo-600"
           ></img>
           <h2 className="card-title">@{User.username}</h2>
-          <p>{User.bio}</p>
-          <div className="card-actions justify-end">
-            <button
-              className="btn btn-primary"
-              onClick={() => handleFollow(userId)}
-            >
-              Follow
-            </button>
-          </div>
+          {displayFollowButtonAndBio ? (
+            <div>
+              <p>{User.bio}</p>
+              <div className="card-actions justify-end">
+                <button
+                  className="btn btn-primary"
+                  onClick={() => handleFollow(userId)}
+                >
+                  Follow
+                </button>
+              </div>
+            </div>
+          ) : (
+            <p>Last Chat</p>
+          )}
         </div>
       </div>
     </div>

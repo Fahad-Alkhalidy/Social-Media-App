@@ -133,7 +133,7 @@ const Home: React.FC = () => {
       <div className="flex w-full flex-col lg:flex-row h-dvh">
         <div className="card bg-base-300 rounded-box flex flex-col flex-start overflow-y-scroll max-h-screen align-top">
           {fetchedUsers?.map((user: IUserType) => (
-            <UserInfoBox User={user} />
+            <UserInfoBox User={user} displayFollowButtonAndBio={true} />
           ))}
         </div>
         <div className="divider lg:divider-horizontal">OR</div>

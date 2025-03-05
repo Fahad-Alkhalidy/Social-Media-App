@@ -1,9 +1,38 @@
+import { useState, useEffect } from "react";
 import Button from "../Functionality Component/Button";
+import UserInfoBox from "../Functionality Component/userInfoBox";
+import { IUserType } from "../../Typescript Types/userType";
 
 const Chat: React.FC = () => {
+  const [allFriends, setAllFriends] = useState<[{ IUserType }]>();
+  useEffect(() => {
+    const fetchFriends = async () => {
+      try {
+        const response = await fetch(
+          `/api/v1/users/getAllFriends/${localStorage.getItem("id")}`,
+          {
+            method: "GET",
+          }
+        );
+        const result = await response.json();
+        if (response.ok) {
+          setAllFriends(result.data.friends);
+          console.log(result.data.friends);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchFriends();
+  }, []);
   return (
     <div className="flex min-h-screen">
-      <div className="basis-1/3">Hello</div>
+      <div className="basis-1/3">
+        {console.log(allFriends)}
+        {allFriends?.map((friend: IUserType) => (
+          <UserInfoBox User={friend} displayFollowButtonAndBio={false} />
+        ))}
+      </div>
       <div className=" basis-1/3 flex flex-col">
         <div className="flex-1">
           <div className="chat chat-start">
