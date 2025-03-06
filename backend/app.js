@@ -25,7 +25,7 @@ const bodyParser = require("body-parser");
 app.use(cookieParser());
 app.use(express.static("public"));
 //app.use(bodyParser.json());
-app.use(cors("*"));
+//app.use(cors("*"));
 //app.use(connectBusboy());
 //Middlewares:
 if (process.env.NODE_ENV === "development") app.use(morgan("dev"));

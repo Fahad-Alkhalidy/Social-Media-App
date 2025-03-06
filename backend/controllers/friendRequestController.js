@@ -8,6 +8,7 @@ exports.checkIfAvailableReqExist = catchAsync(async (req, res, next) => {
   const friendReq = await friendRequestModel.find({
     $and: [{ sender: req.body.sender }, { receiver: req.body.receiver }],
   });
+  console.log(friendReq);
   if (friendReq && friendReq.length !== 0)
     return next(new AppError("You have already sent a friend request before"));
   next();
