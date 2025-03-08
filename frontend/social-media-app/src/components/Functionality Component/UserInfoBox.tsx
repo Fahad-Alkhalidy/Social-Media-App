@@ -17,10 +17,34 @@ const handleFollow = async (userId: string) => {
     console.log(error);
   }
 };
-const UserInfoBox: React.FC<IUser> = ({ User, displayFollowButtonAndBio }) => {
+
+const handleDisplayChat = async (senderId, receiverId, setChat) => {
+  try {
+    const response = await fetch(
+      `/api/v1/messages/${receiverId}?senderId=${senderId}`,
+      {
+        method: "GET",
+      }
+    );
+    const result = await response.json();
+    setChat(result);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const UserInfoBox: React.FC<IUser> = ({
+  User,
+  displayFollowButtonAndBio,
+  setChat,
+}) => {
   const userId = User._id;
   return (
-    <div>
+    <div
+      onClick={() =>
+        handleDisplayChat(localStorage.getItem("id"), User._id, setChat)
+      }
+    >
       <div className="card card-dash bg-base-100 w-96 hover:bg-gray-600">
         <div className="card-body">
           <img

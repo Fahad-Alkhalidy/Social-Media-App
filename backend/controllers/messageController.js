@@ -36,7 +36,7 @@ exports.sendMessage = catchAsync(async (req, res) => {
 
 exports.getMessages = catchAsync(async (req, res) => {
   const { id: userToChatId } = req.params;
-  const senderId = req.user._id;
+  const { senderId } = req.query;
 
   const conversation = await Conversation.findOne({
     participants: { $all: [senderId, userToChatId] },
