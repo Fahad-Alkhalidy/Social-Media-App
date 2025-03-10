@@ -6,10 +6,10 @@ interface SocketContextType {
   socket: Socket | undefined;
   onlineUsers: any[];
 }
-const socketContext = createContext<SocketContextType | undefined>(undefined);
+const SocketContext = createContext<SocketContextType | undefined>(undefined);
 
 export const useSocketContext = () => {
-  return useContext(socketContext);
+  return useContext(SocketContext);
 };
 
 const SocketContextProvider: React.FC = ({ children }) => {
@@ -32,9 +32,9 @@ const SocketContextProvider: React.FC = ({ children }) => {
   }, []);
 
   return (
-    <socketContext.Provider value={{ socket, onlineUsers }}>
+    <SocketContext.Provider value={{ socket, onlineUsers }}>
       {children}
-    </socketContext.Provider>
+    </SocketContext.Provider>
   );
 };
 

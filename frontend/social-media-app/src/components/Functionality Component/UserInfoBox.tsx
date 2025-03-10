@@ -50,7 +50,11 @@ const UserInfoBox: React.FC<IUser> = ({
           <img
             height={50}
             width={50}
-            src={User.profilePicture}
+            src={
+              User.profilePicture
+                ? `http://localhost:3000/image/users/${User.profilePicture}`
+                : `http://localhost:3000/image/users/default.jpg`
+            }
             className="rounded-full border-4 border-indigo-600"
           ></img>
           <h2 className="card-title">@{User.username}</h2>

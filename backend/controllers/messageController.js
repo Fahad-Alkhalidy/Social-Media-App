@@ -4,10 +4,12 @@ const Message = require("../models/messageModel");
 const { getReceiverSocketId, io } = require("../socket/socket");
 
 exports.sendMessage = catchAsync(async (req, res) => {
+  const { message } = req.body;
+  const { id: receiverId } = req.params;
+  const senderId = req.user._id;
   let conversation = await Conversation.findOne({
     participants: { $all: [senderId, receiverId] },
   });
-
   if (!conversation) {
     conversation = await Conversation.create({
       participants: [senderId, receiverId],
@@ -15,9 +17,9 @@ exports.sendMessage = catchAsync(async (req, res) => {
   }
 
   const newMessage = new Message({
-    senderId,
-    receiverId,
-    message,
+    sender: senderId,
+    receiver: receiverId,
+    content: message,
   });
 
   if (newMessage) {
@@ -37,7 +39,7 @@ exports.sendMessage = catchAsync(async (req, res) => {
 exports.getMessages = catchAsync(async (req, res) => {
   const { id: userToChatId } = req.params;
   const { senderId } = req.query;
-
+  console.log(senderId);
   const conversation = await Conversation.findOne({
     participants: { $all: [senderId, userToChatId] },
   }).populate("messages");

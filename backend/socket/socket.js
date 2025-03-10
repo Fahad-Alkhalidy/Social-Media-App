@@ -10,6 +10,10 @@ const io = new Server(server, {
     method: ["GET", "POST"],
   },
 });
+
+const getReceiverSocketId = (receiverId) => {
+  return userSocketMap[receiverId];
+};
 const userSocketMap = {};
 io.on("connection", (socket) => {
   console.log(`User is connected to ${socket.id}`);
@@ -24,8 +28,4 @@ io.on("connection", (socket) => {
     io.emit("getOnlineUsers", Object.keys(userSocketMap));
   });
 });
-module.exports = { app, io, server };
-
-exports.getReceiverSocketId = (receiverId) => {
-  return userSocketMap[receiverId];
-};
+module.exports = { app, io, server, getReceiverSocketId };
