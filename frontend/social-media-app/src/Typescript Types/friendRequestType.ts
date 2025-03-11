@@ -11,7 +11,7 @@ export interface IFriendRequest {
   key: Date;
 }
 
-interface ISender {
+export interface ISender {
   id: string;
   username: string;
   profilePicture: string;
@@ -22,3 +22,4 @@ interface IReceiver {
   username: string;
   profilePicture: string;
 }
+
