@@ -1,58 +1,79 @@
-//import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-//import FriendReq from "../Functionality Component/FriendReq";
-
-// import {
-//   UpdateUserDataForm,
-//   UpdateUserDataFormDefault,
-//} from "../../Typescript Types/formType";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-//import Button from "../Functionality Component/Button";
 
-//import Loading from "../Functionality Component/Loading";
-//import Post from "../Functionality Component/Post";
+// Components
 import UserPosts from "../Functionality Component/Profile Page Components/UserPosts";
 import UserInfo from "../Functionality Component/Profile Page Components/UserInfo";
 import UpdateForm from "../Functionality Component/Profile Page Components/UpdateForm";
 import FriendRequestContainer from "../Functionality Component/Profile Page Components/FriendRequestContainer";
-import { useState } from "react";
 
-//import getCookie from "./getJWTCookie";
 const Profile: React.FC = () => {
   const [userData, setUserData] = useState();
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
   const navigate = useNavigate();
+
+  // Handle back button navigation
   const handleBackButtonClick = () => {
     navigate("/");
   };
 
-  //<p className="text-center">{loading ? <Loading /> : ""}</p>
-  return (
-    <div className="w-full">
-      {/* Loading Indicator */}
+  // Toggle the dialog state
+  const handleOpenUpdateFormDialog = () => {
+    setOpenDialog((prevState) => !prevState);
+  };
 
-      <div className="flex flex-col lg:flex-row gap-5 mt-5">
-        {/* Followed Pages Section */}
-        <UserPosts></UserPosts>
-        {/* Back Button */}
+  return (
+    <div>
+      <div className="navbar bg-primary text-primary-content">
+        <button className="btn btn-ghost text-xl">daisyUI</button>
         <button
           onClick={handleBackButtonClick}
-          className="bg-indigo-600 text-white px-4 py-2 rounded-md mt-4 hover:bg-indigo-500"
+          className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-500"
         >
           Back to Home
         </button>
       </div>
+      <div className="flex max-h-screen w-full">
+        {/* Left Section: User Posts */}
+        <div className="basis-1/3">
+          <UserPosts />
+        </div>
 
-      {/* User Profile Section */}
-      <UserInfo></UserInfo>
+        {/* Center Section: User Profile and Modal */}
+        <div className="flex flex-col align-middle basis-1/3">
+          <UserInfo setUserInfo={setUserData} />
 
-      {/* Profile Update Form */}
-      <UpdateForm updatedUserData={setUserData}></UpdateForm>
+          {/* Button to open the Update Form Modal */}
+          <button
+            onClick={handleOpenUpdateFormDialog}
+            className="bg-indigo-600 text-white px-4 py-2 rounded-md mt-4  hover:bg-indigo-500"
+          >
+            Update Your Info
+          </button>
 
-      {/* Additional Content Section */}
-      <FriendRequestContainer></FriendRequestContainer>
-      {/* Error Message */}
+          {/* Modal for Updating User Info */}
+          {openDialog && (
+            <div className="modal modal-open" role="dialog">
+              <div className="modal-box">
+                <h3 className="text-lg font-bold">Update Your Profile</h3>
+                <UpdateForm updatedUserData={setUserData} />
+                <div className="modal-action">
+                  <button onClick={handleOpenUpdateFormDialog} className="btn">
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Right Section: Friend Requests */}
+        <div className="basis-1/3">
+          <FriendRequestContainer />
+        </div>
+      </div>
     </div>
   );
-  //{error && <p className="text-center text-red-500 mt-4">{error}</p>}
 };
 
 export default Profile;

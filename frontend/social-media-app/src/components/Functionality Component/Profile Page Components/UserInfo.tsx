@@ -5,7 +5,7 @@ const UserInfo = ({ setUserInfo }) => {
   const { loading, error, profileData } = useGetCurrentUser();
   setUserInfo(profileData);
   return (
-    <div className="card bg-base-300 rounded-box flex flex-col items-center justify-center h-fit basis-1/3 p-5">
+    <div className="card bg-base-300 rounded-box flex flex-col items-center justify-start h-fit basis-1/3 p-5 min-h-135">
       <div className="text-center space-y-4">
         <p className="font-medium text-lg">{profileData.coverPhoto}</p>
         <div className="flex justify-center items-center">

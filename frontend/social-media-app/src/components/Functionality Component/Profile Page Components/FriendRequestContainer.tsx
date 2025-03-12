@@ -5,7 +5,7 @@ import Loading from "../Loading";
 const FriendRequestContainer = () => {
   const { error, loading, allUserFriendRequests } = useGetFriendRequests();
   return (
-    <div className="card bg-base-300 rounded-box flex flex-col justify-start items-center max-h-screen basis-1/3 overflow-y-scroll">
+    <div className="card bg-base-300 rounded-box flex flex-col justify-start items-center min-h-150 basis-1/3 overflow-y-scroll">
       <p className="text-center text-lg font-medium mt-5">Friend Requests</p>
       <div className="">
         {allUserFriendRequests?.map(
