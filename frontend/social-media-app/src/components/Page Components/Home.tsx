@@ -2,7 +2,9 @@ import "../../Styling/App.css";
 import { useState, useEffect } from "react";
 import { IUserType } from "../../Typescript Types/userType";
 import UserInfoBox from "../Functionality Component/userInfoBox";
-import Button from "../Functionality Component/Button";
+//import Button from "../Functionality Component/Button";
+import PagesDrawer from "../Functionality Component/Drawer";
+
 const Home: React.FC = () => {
   const [fetchedUsers, setFetchedUsers] = useState<[{ IUserType }]>();
   useEffect(() => {
@@ -25,39 +27,7 @@ const Home: React.FC = () => {
             <div className="flex">
               <div className="logo-image w-20 h-auto"></div>
               <a className="btn btn-ghost text-xl mr-10">talkybox</a>
-
-              <div className="drawer">
-                <input
-                  id="my-drawer"
-                  type="checkbox"
-                  className="drawer-toggle"
-                />
-                <div className="drawer-content">
-                  {/* Page content here */}
-                  <label
-                    htmlFor="my-drawer"
-                    className="btn btn-primary drawer-button"
-                  >
-                    Show Followed Pages
-                  </label>
-                </div>
-                <div className="drawer-side z-1">
-                  <label
-                    htmlFor="my-drawer"
-                    aria-label="close sidebar"
-                    className="drawer-overlay"
-                  ></label>
-                  <ul className="menu bg-base-200 text-base-content min-h-full w-80 p-4">
-                    {/* Sidebar content here */}
-                    <li>
-                      <a>Sidebar Item 1</a>
-                    </li>
-                    <li>
-                      <a>Sidebar Item 2</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
+              <PagesDrawer></PagesDrawer>
             </div>
           </div>
           <div className="flex-none">
@@ -66,32 +36,6 @@ const Home: React.FC = () => {
                 <a href="/chat">
                   Chat
                   <span className="badge badge-xs">99+</span>
-                </a>
-              </li>
-              <li>
-                <a>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                  Updates
-                  <span className="badge badge-xs badge-warning">NEW</span>
-                </a>
-              </li>
-              <li>
-                <a>
-                  Stats
-                  <span className="badge badge-xs badge-info"></span>
                 </a>
               </li>
             </ul>

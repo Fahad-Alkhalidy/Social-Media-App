@@ -1,33 +1,30 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import {
-  UpdateUserDataForm,
-  UpdateUserDataFormDefault,
-} from "../../../Typescript Types/formType";
-import useSubmitUpdateForm from "../../../hooks/useSubmitUpdateForm";
-import Button from "../Button";
-import Loading from "../Loading";
 import { handleChangeInForm } from "./handleChange";
+import { UpdateUserDataFormDefault } from "../../../Typescript Types/formType";
+import Loading from "../Loading";
+import Button from "../Button";
+import useCreatePost from "../../../hooks/useCreatePost";
 
-const UpdateForm = () => {
+const CreatePostDialog = () => {
   const formInfo = new FormData();
   const [file, setFile] = useState();
   const [formData, setFormData] = useState(UpdateUserDataFormDefault);
-  const { handleSubmission, loading, error } = useSubmitUpdateForm();
+  const { loading, error, handleSubmission } = useCreatePost();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     handleChangeInForm(e, setFormData);
   };
 
-  const handleFormSubmission = (e: FormEvent<HTMLFormElement>) => {
+  const handleCreatePost = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     handleSubmission(formInfo, file);
-    const submissionData: UpdateUserDataForm = { ...formData };
-    if (formData.profilePicture === null) delete submissionData.profilePicture;
+    //const submissionData: UpdateUserDataForm = { ...formData };
+    //if (formData.profilePicture === null) delete submissionData.profilePicture;
   };
 
   return (
     <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-      <form onSubmit={handleFormSubmission} className="space-y-6">
+      <form onSubmit={handleCreatePost} className="space-y-6">
         <div className="flex flex-col items-center">
           <input
             id="profilePicture"
@@ -62,4 +59,5 @@ const UpdateForm = () => {
     </div>
   );
 };
-export default UpdateForm;
+
+export default CreatePostDialog;

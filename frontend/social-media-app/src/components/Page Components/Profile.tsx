@@ -6,10 +6,15 @@ import UserPosts from "../Functionality Component/Profile Page Components/UserPo
 import UserInfo from "../Functionality Component/Profile Page Components/UserInfo";
 import UpdateForm from "../Functionality Component/Profile Page Components/UpdateForm";
 import FriendRequestContainer from "../Functionality Component/Profile Page Components/FriendRequestContainer";
+import useCreatePost from "../../hooks/useCreatePost";
+import CreatePostDialog from "../Functionality Component/Profile Page Components/CreatePostDialog";
 
 const Profile: React.FC = () => {
-  const [userData, setUserData] = useState();
-  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const [openUpdateUserDataDialog, setUpdateUserDataDialog] =
+    useState<boolean>(false);
+  const [openCreateNewPostDialog, setCreateNewPostDialog] =
+    useState<boolean>(false);
+  const [content, setContent] = useState<string>("");
   const navigate = useNavigate();
 
   // Handle back button navigation
@@ -19,11 +24,15 @@ const Profile: React.FC = () => {
 
   // Toggle the dialog state
   const handleOpenUpdateFormDialog = () => {
-    setOpenDialog((prevState) => !prevState);
+    setUpdateUserDataDialog((prevState) => !prevState);
+  };
+
+  const handleCloseCreateNewPost = () => {
+    setCreateNewPostDialog(false);
   };
 
   return (
-    <div>
+    <div className="bg-base-300">
       <div className="navbar bg-primary text-primary-content">
         <button className="btn btn-ghost text-xl">daisyUI</button>
         <button
@@ -36,12 +45,12 @@ const Profile: React.FC = () => {
       <div className="flex max-h-screen w-full">
         {/* Left Section: User Posts */}
         <div className="basis-1/3">
-          <UserPosts />
+          <UserPosts handleCreateNewPost={setCreateNewPostDialog} />
         </div>
 
         {/* Center Section: User Profile and Modal */}
         <div className="flex flex-col align-middle basis-1/3">
-          <UserInfo setUserInfo={setUserData} />
+          <UserInfo />
 
           {/* Button to open the Update Form Modal */}
           <button
@@ -52,13 +61,28 @@ const Profile: React.FC = () => {
           </button>
 
           {/* Modal for Updating User Info */}
-          {openDialog && (
+          {openUpdateUserDataDialog && (
             <div className="modal modal-open" role="dialog">
               <div className="modal-box">
                 <h3 className="text-lg font-bold">Update Your Profile</h3>
-                <UpdateForm updatedUserData={setUserData} />
+                <UpdateForm />
                 <div className="modal-action">
                   <button onClick={handleOpenUpdateFormDialog} className="btn">
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {openCreateNewPostDialog && (
+            <div className="modal modal-open" role="dialog">
+              <div className="modal-box">
+                <h3 className="text-lg font-bold">Create A New Post</h3>
+                {/* <UpdateForm updatedUserData={setUserData} /> */}
+                <CreatePostDialog></CreatePostDialog>
+                <div className="modal-action">
+                  <button onClick={handleCloseCreateNewPost} className="btn">
                     Close
                   </button>
                 </div>
