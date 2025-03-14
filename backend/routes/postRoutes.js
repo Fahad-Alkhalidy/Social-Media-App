@@ -4,7 +4,14 @@ const { protect } = require("../controllers/authController");
 const router = express.Router();
 module.exports = router;
 router.use(protect);
-router.route("/createNewPost").post(postController.createPost);
+router
+  .route("/createNewPost")
+  .post(
+    postController.uploadPostMedia,
+    postController.resizePostMedia,
+    postController.checkIfUserUploadedMedia,
+    postController.createPost
+  );
 
 //for retreiving the post by its id
 //router.route("/:id").get(postController.getPost);

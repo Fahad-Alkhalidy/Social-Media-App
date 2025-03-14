@@ -14,6 +14,7 @@ const useSubmitUpdateForm = () => {
     useState<UpdateUserDataForm>(UpdateUserDataFormDefault);
 
   const handleSubmission = async (formData, file) => {
+    console.log(formData);
     try {
       setLoading(true);
       formData.append("profilePicture", file);

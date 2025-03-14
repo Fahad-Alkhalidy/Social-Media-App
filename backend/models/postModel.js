@@ -4,13 +4,16 @@ const postSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-    required: [true, "The Post must have "],
+    //required: [true, "The Post must have a user"],
   },
   content: {
     type: String,
-    required: [true, "The post must contain a message"],
+    // required: [true, "The post must contain a message"],
   },
   media: {
+    type: String,
+  },
+  hashtag: {
     type: String,
   },
   likes: {
@@ -29,10 +32,6 @@ const postSchema = new mongoose.Schema({
     type: String,
     enum: ["Public", "Private", "Custom"],
     default: "Public",
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now(),
   },
   updatedAt: {
     type: Date,

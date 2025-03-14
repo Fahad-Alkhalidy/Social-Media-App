@@ -17,7 +17,7 @@ const FriendRequestContainer = () => {
           )
         )}
       </div>
-      <p className="text-center">{loading ? <Loading></Loading> : ""}</p>
+      <div>{loading ? <Loading></Loading> : ""}</div>
       {error && <p className="text-center text-red-500 mt-4">{error}</p>}
     </div>
   );

@@ -1,25 +1,51 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import { handleChangeInForm } from "./handleChange";
-import { UpdateUserDataFormDefault } from "../../../Typescript Types/formType";
+import { IPostForm, PostFormDefault } from "../../../Typescript Types/formType";
 import Loading from "../Loading";
 import Button from "../Button";
 import useCreatePost from "../../../hooks/useCreatePost";
 
 const CreatePostDialog = () => {
-  const formInfo = new FormData();
-  const [file, setFile] = useState();
-  const [formData, setFormData] = useState(UpdateUserDataFormDefault);
+  const [file, setFile] = useState<File | undefined>();
+  const [formData, setFormData] = useState(PostFormDefault);
   const { loading, error, handleSubmission } = useCreatePost();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    handleChangeInForm(e, setFormData);
+    const { name, value, type, files } = e.target;
+    if (type === "file" && files) {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: files[0],
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
 
   const handleCreatePost = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const formInfo = new FormData();
+    // Create a new FormData object
+    //formInfo.append("media", file);
+    // Log formData before appending
+    console.log("FormData before appending:", formData);
+
+    // Append all form data to formInfo
+    Object.keys(formData).forEach((key) => {
+      // Check if formData key has a value before appending
+      const value = formData[key as keyof IPostForm];
+      if (value) {
+        formInfo.append(key as keyof IPostForm, value as string | Blob);
+        //console.log(`Appended ${key}: ${value}`); // Debugging log
+      }
+    });
+    // Send the form data to handleSubmission
+    console.log(formInfo);
+    console.log(file);
     handleSubmission(formInfo, file);
-    //const submissionData: UpdateUserDataForm = { ...formData };
-    //if (formData.profilePicture === null) delete submissionData.profilePicture;
   };
 
   return (
@@ -27,34 +53,45 @@ const CreatePostDialog = () => {
       <form onSubmit={handleCreatePost} className="space-y-6">
         <div className="flex flex-col items-center">
           <input
-            id="profilePicture"
+            id="media"
             type="file"
             className="file-input file-input-primary w-full"
-            onChange={(e) => setFile(e.target.files[0])}
-            name="profilePicture"
+            onChange={(e) =>
+              setFile(e.target.files ? e.target.files[0] : undefined)
+            }
+            name="media"
           />
           <input
-            id="username"
+            id="content"
             type="text"
-            placeholder="New username"
+            placeholder="content"
             className="input input-primary mt-4 w-full"
             onChange={handleChange}
-            name="username"
-            value={formData.username}
+            name="content"
+            value={formData.content}
           />
           <input
-            id="email"
-            type="email"
-            placeholder="New email"
-            className="input input-primary mt-4 w-full mb-4"
+            id="hashtag"
+            type="text"
+            placeholder="hashtag"
+            className="input input-primary mt-4 w-full"
             onChange={handleChange}
-            name="email"
-            value={formData.email}
+            name="hashtag"
+            value={formData.hashtag}
+          />
+          <input
+            id="visibility"
+            type="text"
+            placeholder="visibility"
+            className="input input-primary mt-4 w-full  mb-4"
+            onChange={handleChange}
+            name="visibility"
+            value={formData.visibility}
           />
           <Button>Submit</Button>
         </div>
       </form>
-      <p className="text-center">{loading ? <Loading></Loading> : ""}</p>
+      <div>{loading ? <Loading /> : ""}</div>
       {error && <p className="text-center text-red-500 mt-4">{error}</p>}
     </div>
   );

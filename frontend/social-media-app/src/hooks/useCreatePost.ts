@@ -8,16 +8,24 @@ const useCreatePost = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const handleSubmission = async (post, media) => {
+    const formInfo = new FormData();
     setLoading(true);
-    post.append("profilePicture", media);
+    const fullUserInfo = { user: localStorage.getItem("id"), ...post };
+    console.log(fullUserInfo);
+    formInfo.append("user", fullUserInfo.user);
+    formInfo.append("content", fullUserInfo.message);
+    formInfo.append("hashtag", fullUserInfo.hashtag);
+    formInfo.append("visibility", fullUserInfo.visibility);
+    post.append("media", media);
+    console.log(media);
     try {
-      const response = await fetch(`/api/v1/posts/createPost/`, {
+      const response = await fetch(`/api/v1/posts/createNewPost/`, {
         signal,
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(post),
+        body: JSON.stringify(formInfo),
       });
       const result = await response.json();
       if (!response.ok) {

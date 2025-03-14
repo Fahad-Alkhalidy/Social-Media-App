@@ -20,9 +20,8 @@ const UpdateForm = () => {
 
   const handleFormSubmission = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log(formInfo);
     handleSubmission(formInfo, file);
-    const submissionData: UpdateUserDataForm = { ...formData };
-    if (formData.profilePicture === null) delete submissionData.profilePicture;
   };
 
   return (

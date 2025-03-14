@@ -22,3 +22,19 @@ export const UpdateUserDataFormDefault: UpdateUserDataForm = {
   email: "",
   profilePicture: null,
 };
+
+export interface IPostForm {
+  username: string;
+  content: string;
+  media: string;
+  hashtag: string;
+  visibility: string;
+}
+
+export const PostFormDefault: IPostForm = {
+  username: "",
+  content: "",
+  media: "",
+  hashtag: "",
+  visibility: "",
+};
