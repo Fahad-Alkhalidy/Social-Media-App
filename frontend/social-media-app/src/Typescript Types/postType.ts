@@ -4,6 +4,7 @@ export interface IPost {
   postId: string;
   user: IUserType;
   content: string;
+  media: string;
   visiblity: string;
 }
 

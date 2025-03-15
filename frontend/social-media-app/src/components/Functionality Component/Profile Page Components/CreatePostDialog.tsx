@@ -1,98 +1,99 @@
-import { ChangeEvent, FormEvent, useState } from "react";
-import { IPostForm, PostFormDefault } from "../../../Typescript Types/formType";
-import Loading from "../Loading";
-import Button from "../Button";
-import useCreatePost from "../../../hooks/useCreatePost";
+import { useForm } from "react-hook-form";
+
+type FormFields = {
+  media: FileList;
+  content: string;
+  hashtag: string;
+  visibility: string;
+};
 
 const CreatePostDialog = () => {
-  const [file, setFile] = useState<File | undefined>();
-  const [formData, setFormData] = useState(PostFormDefault);
-  const { loading, error, handleSubmission } = useCreatePost();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormFields>();
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, files } = e.target;
-    if (type === "file" && files) {
-      setFormData((prevData) => ({
-        ...prevData,
-        [name]: files[0],
-      }));
-    } else {
-      setFormData((prevData) => ({
-        ...prevData,
-        [name]: value,
-      }));
+  // Handle form submission
+  const onSubmit = async (data: FormFields) => {
+    const formData = new FormData();
+
+    // Append the form fields to FormData
+    const id = localStorage.getItem("id");
+    if (id) formData.append("user", id);
+    formData.append("content", data.content);
+    formData.append("hashtag", data.hashtag);
+    formData.append("visibility", data.visibility);
+
+    // Append the media (ensure it's handled as a file)
+    if (data.media && data.media.length > 0) {
+      formData.append("media", data.media[0]); // Append the first file
     }
-  };
 
-  const handleCreatePost = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    try {
+      // Send the FormData as a POST request to the server
+      const response = await fetch("/api/v1/posts/createNewPost/", {
+        method: "POST",
+        body: formData,
+      });
 
-    const formInfo = new FormData();
-    // Create a new FormData object
-    //formInfo.append("media", file);
-    // Log formData before appending
-    console.log("FormData before appending:", formData);
-
-    // Append all form data to formInfo
-    Object.keys(formData).forEach((key) => {
-      // Check if formData key has a value before appending
-      const value = formData[key as keyof IPostForm];
-      if (value) {
-        formInfo.append(key as keyof IPostForm, value as string | Blob);
-        //console.log(`Appended ${key}: ${value}`); // Debugging log
+      if (response.ok) {
+        alert("Post Created!");
+      } else {
+        alert("Post Failed To Be Created!");
       }
-    });
-    // Send the form data to handleSubmission
-    console.log(formInfo);
-    console.log(file);
-    handleSubmission(formInfo, file);
+    } catch (error) {
+      console.error("Error during submission:", error);
+      alert("An error occurred while submitting the post.");
+    }
   };
 
   return (
     <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-      <form onSubmit={handleCreatePost} className="space-y-6">
+      <form
+        className="space-y-6"
+        onSubmit={handleSubmit(onSubmit)} // Use handleSubmit from react-hook-form
+      >
         <div className="flex flex-col items-center">
           <input
+            {...register("media", { required: "The Post Must Have An Image" })}
             id="media"
             type="file"
             className="file-input file-input-primary w-full"
-            onChange={(e) =>
-              setFile(e.target.files ? e.target.files[0] : undefined)
-            }
             name="media"
           />
+          {errors.media && <p>{errors.media.message}</p>}{" "}
+          {/* Error handling for file input */}
           <input
+            {...register("content", {
+              required: "The Post Must Contain A Content",
+            })}
             id="content"
             type="text"
-            placeholder="content"
+            placeholder="Content"
             className="input input-primary mt-4 w-full"
-            onChange={handleChange}
             name="content"
-            value={formData.content}
           />
+          {errors.content && <p>{errors.content.message}</p>}{" "}
+          {/* Error handling for content */}
           <input
+            {...register("hashtag")}
             id="hashtag"
             type="text"
-            placeholder="hashtag"
+            placeholder="Hashtag"
             className="input input-primary mt-4 w-full"
-            onChange={handleChange}
             name="hashtag"
-            value={formData.hashtag}
           />
-          <input
-            id="visibility"
-            type="text"
-            placeholder="visibility"
-            className="input input-primary mt-4 w-full  mb-4"
-            onChange={handleChange}
-            name="visibility"
-            value={formData.visibility}
-          />
-          <Button>Submit</Button>
+          <select
+            {...register("visibility", { required: true })}
+            className="input input-primary mt-4 w-full mb-4"
+          >
+            <option value="Public">Public</option>
+            <option value="Private">Private</option>
+          </select>
+          <button type="submit">Submit</button>
         </div>
       </form>
-      <div>{loading ? <Loading /> : ""}</div>
-      {error && <p className="text-center text-red-500 mt-4">{error}</p>}
     </div>
   );
 };

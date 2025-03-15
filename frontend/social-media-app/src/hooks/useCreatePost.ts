@@ -7,17 +7,12 @@ const signal = controller.signal;
 const useCreatePost = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-  const handleSubmission = async (post, media) => {
+  const handleSubmission = async (post) => {
     const formInfo = new FormData();
     setLoading(true);
-    const fullUserInfo = { user: localStorage.getItem("id"), ...post };
-    console.log(fullUserInfo);
-    formInfo.append("user", fullUserInfo.user);
-    formInfo.append("content", fullUserInfo.message);
-    formInfo.append("hashtag", fullUserInfo.hashtag);
-    formInfo.append("visibility", fullUserInfo.visibility);
-    post.append("media", media);
-    console.log(media);
+    const File = post.media.FileList[0];
+    //const fullUserInfo = { user: localStorage.getItem("id"), ...post };
+    console.log(File);
     try {
       const response = await fetch(`/api/v1/posts/createNewPost/`, {
         signal,

@@ -7,19 +7,34 @@ const Post: React.FC<IPostType> = ({ Post }) => {
   const handleLike = () => {
     setLike((like: boolean) => !like);
   };
+  console.log(Post);
+
   return (
     <div>
       <div className="card bg-base-100 w-96 shadow-sm">
+        <div className="flex justify-start items-center mt-5 ml-5">
+          <img
+            className="rounded-full border-4 border-indigo-600"
+            height={60}
+            width={60}
+            src={`http://localhost:3000/image/users/${Post.user.profilePicture}`}
+            alt="Profile"
+          />
+          <h2 className="card-title ml-4 text-2xl">@{Post.user.username}</h2>
+        </div>
+        <div className="divider divider-primary"></div>
         <figure>
           <img
-            src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
+            height={100}
+            width={200}
+            src={`http://localhost:3000/image/users/${Post.media}`}
             alt="Shoes"
           />
         </figure>
         <div className="card-body">
-          <h2 className="card-title">Post.username</h2>
-          <p>{Post.content}</p>
+          <p className="text-xl">{Post.content}</p>
           <div className="card-actions justify-end">
+            <p>0</p>
             <button
               onClick={handleLike}
               className="btn bg-base-100 border-0 outline-none"

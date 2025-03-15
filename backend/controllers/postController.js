@@ -20,6 +20,10 @@ exports.getAllUserPosts = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.filterCreatePost = catchAsync(async (req, res, next) => {
+  console.log(req);
+});
+
 exports.createPost = factory.createOne(Post);
 
 //File Uploading:

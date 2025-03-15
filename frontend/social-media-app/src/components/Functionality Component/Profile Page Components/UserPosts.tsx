@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useGetPosts from "../../../hooks/useGetPosts";
 import Loading from "../Loading";
 import Post from "./Post";
@@ -8,6 +8,7 @@ const UserPosts = ({ handleCreateNewPost }) => {
   const openDialog = () => {
     handleCreateNewPost((openCreateNewPost) => !openCreateNewPost);
   };
+  useEffect(() => {}, [allUserPosts]);
   return (
     <div className="card bg-base-300 rounded-box flex flex-col justify-start items-center max-h-150 overflow-y-scroll basis-1/3">
       <div className="flex items-center justify-between mt-5 mb-5">
