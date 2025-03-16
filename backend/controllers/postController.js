@@ -6,6 +6,46 @@ const sharp = require("sharp");
 exports.createPost = factory.createOne(Post);
 exports.getPost = factory.getOne(Post);
 
+//helper functions like this must not contain catchAsync as it doesn't read anything from the request and
+//it is not a middleware, also it doesn't send a response
+const getAllFriendPosts = async (friendId) => {
+  try {
+    // Fetch posts for the given friendId
+    const posts = await Post.find({
+      user: friendId,
+      visiblity: "Public",
+    }).populate({
+      path: "user",
+      select: "username profilePicture",
+    });
+    return posts; // Return the posts array
+  } catch (error) {
+    console.error("Error fetching friend's posts:", error);
+    return []; // Return empty array if an error occurs
+  }
+};
+
+exports.getFriendUsersPosts = catchAsync(async (req, res, next) => {
+  const userFriends = req.user.friends;
+
+  // Fetch posts for all friends in parallel
+  const allFriendPosts = await Promise.all(
+    userFriends.map((friend) => getAllFriendPosts(friend.toString()))
+  );
+
+  console.log(allFriendPosts); // Debugging output
+
+  // Flatten the array of arrays into a single array of posts
+  const flattenedPosts = allFriendPosts.flat();
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      friendPosts: flattenedPosts,
+    },
+  });
+});
+
 exports.getAllUserPosts = catchAsync(async (req, res, next) => {
   const userId = req.params.id;
   const userPosts = await Post.find({ user: userId }).populate({

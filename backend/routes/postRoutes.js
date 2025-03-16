@@ -12,7 +12,7 @@ router
     postController.checkIfUserUploadedMedia,
     postController.createPost
   );
-
+router.route("/FriendsPosts").get(postController.getFriendUsersPosts);
 //for retreiving the post by its id
 //router.route("/:id").get(postController.getPost);
 
