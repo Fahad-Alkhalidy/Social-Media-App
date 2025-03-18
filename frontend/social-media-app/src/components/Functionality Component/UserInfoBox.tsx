@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { IUser } from "../../Typescript Types/userType";
-const handleFollow = async (userId: string) => {
+const handleFollow = async (userId: string, setError) => {
   try {
     const response = await fetch("/api/v1/friendReqs/createAFriendRequest", {
       method: "POST",
@@ -14,37 +15,15 @@ const handleFollow = async (userId: string) => {
     const result = await response.json();
     if (response.ok) console.log(result);
   } catch (error) {
-    console.log(error);
+    setError(error);
   }
 };
 
-const handleDisplayChat = async (senderId, receiverId, setChat) => {
-  try {
-    const response = await fetch(
-      `/api/v1/messages/${receiverId}?senderId=${senderId}`,
-      {
-        method: "GET",
-      }
-    );
-    const result = await response.json();
-    setChat(result);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-const UserInfoBox: React.FC<IUser> = ({
-  User,
-  displayFollowButtonAndBio,
-  setChat,
-}) => {
+const UserInfoBox: React.FC<IUser> = ({ User }) => {
+  const [error, setError] = useState<string>("");
   const userId = User._id;
   return (
-    <div
-      onClick={() =>
-        handleDisplayChat(localStorage.getItem("id"), User._id, setChat)
-      }
-    >
+    <div>
       <div className="card card-dash bg-base-100 w-96 hover:bg-gray-600">
         <div className="card-body">
           <img
@@ -58,21 +37,20 @@ const UserInfoBox: React.FC<IUser> = ({
             className="rounded-full border-4 border-indigo-600"
           ></img>
           <h2 className="card-title">@{User.username}</h2>
-          {displayFollowButtonAndBio ? (
-            <div>
-              <p>{User.bio}</p>
-              <div className="card-actions justify-end">
-                <button
-                  className="btn btn-primary"
-                  onClick={() => handleFollow(userId)}
-                >
-                  Follow
-                </button>
-              </div>
+          <div>
+            <p>{User.bio}</p>
+            <div className="card-actions justify-end">
+              <button
+                className="btn btn-primary"
+                onClick={() => handleFollow(userId, setError)}
+              >
+                Follow
+              </button>
+              {error ? (
+                <div>{"You have Already Sent A Friend Request!"}</div>
+              ) : null}
             </div>
-          ) : (
-            <p>Last Chat</p>
-          )}
+          </div>
         </div>
       </div>
     </div>

@@ -100,3 +100,5 @@ exports.checkIfUserUploadedMedia = catchAsync(async (req, res, next) => {
 
   next();
 });
+
+exports.getAllPosts = factory.getAll(Post);

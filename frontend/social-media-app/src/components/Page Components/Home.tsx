@@ -1,15 +1,17 @@
 import "../../Styling/App.css";
-import { useState, useEffect } from "react";
-import { IUserType } from "../../Typescript Types/userType";
+import { useState, useEffect, use } from "react";
+import { IUser, IUserType } from "../../Typescript Types/userType";
 import UserInfoBox from "../Functionality Component/userInfoBox";
 //import Button from "../Functionality Component/Button";
 import PagesDrawer from "../Functionality Component/Drawer";
 import { IPost } from "../../Typescript Types/postType";
 import Post from "../Functionality Component/Profile Page Components/Post";
+import { typographyClasses } from "@mui/material";
 
 const Home: React.FC = () => {
   const [fetchedUsers, setFetchedUsers] = useState<[{ IUserType }]>();
   const [fetchFriendPosts, setFetchFriendPosts] = useState<IPost[]>();
+  const [fetchExplorePosts, setFetchExplorePosts] = useState<IPost[]>();
   useEffect(() => {
     const fetchFriendPosts = async () => {
       try {
@@ -35,6 +37,21 @@ const Home: React.FC = () => {
     };
     fetchUsers();
   }, []);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch("/api/v1/posts/");
+        const result = await response.json();
+        if (response.ok) {
+          setFetchExplorePosts(result.data.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchUsers();
+  }, []);
   return (
     <div className="main">
       <div className="nav-bar">
@@ -46,7 +63,28 @@ const Home: React.FC = () => {
               <PagesDrawer></PagesDrawer>
             </div>
           </div>
-          <div className="flex-none">
+          <div className="flex-1 basis-1/10 flex">
+            <label className="input flex-1">
+              <svg
+                className="h-[1em] opacity-50"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+              >
+                <g
+                  strokeLinejoin="round"
+                  strokeLinecap="round"
+                  strokeWidth="2.5"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.3-4.3"></path>
+                </g>
+              </svg>
+              <input type="search" required placeholder="Search Users" />
+            </label>
+          </div>
+          <div className=" basis-1/4 flex justify-end">
             <ul className="menu bg-base-200 lg:menu-horizontal rounded-box">
               <li>
                 <a href="/chat">
@@ -93,7 +131,7 @@ const Home: React.FC = () => {
       <div className="flex w-full flex-col lg:flex-row h-dvh">
         <div className="card bg-base-300 rounded-box flex flex-col flex-start overflow-y-scroll min-h-screen align-top">
           {fetchedUsers?.map((user) => (
-            <UserInfoBox User={user} displayFollowButtonAndBio={true} />
+            <UserInfoBox User={user} />
           ))}
         </div>
         <div className="divider lg:divider-horizontal"></div>
@@ -109,7 +147,7 @@ const Home: React.FC = () => {
               />
               <div className="tab-content border-base-300 bg-base-100 p-10 max-h-150 overflow-y-scroll w-130">
                 {fetchFriendPosts?.map((post) => (
-                  <Post Post={post}></Post>
+                  <Post Post={post} key={post.postId}></Post>
                 ))}
               </div>
               <input
@@ -119,8 +157,10 @@ const Home: React.FC = () => {
                 aria-label="Explore"
                 defaultChecked
               />
-              <div className="tab-content border-base-300 bg-base-100 p-10 w-130">
-                Tab content 2
+              <div className="tab-content border-base-300 bg-base-100 p-10 w-130 max-h-screen overflow-y-scroll">
+                {fetchExplorePosts?.map((post) => (
+                  <Post Post={post} key={post.postId}></Post>
+                ))}
               </div>
             </div>
           </div>

@@ -1,10 +1,13 @@
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 import useConversation from "../../../zustand/useConversation";
 import NoChatSelected from "./NoChatSelected";
 import Messages from "./Messages";
 import MessageInput from "./MessageInput";
 const MessageContainer = () => {
   const { selectedConversation, setSelectedConversation } = useConversation();
+
   useEffect(() => {
     return () => setSelectedConversation(null);
   }, [setSelectedConversation]);
@@ -21,6 +24,7 @@ const MessageContainer = () => {
               {selectedConversation.username}
             </span>
           </div>
+
           <Messages />
           <MessageInput />
         </>

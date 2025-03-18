@@ -111,10 +111,7 @@ exports.addAsFriendForReqSender = catchAsync(async (req, res, next) => {
 
 exports.getAllFriends = catchAsync(async (req, res, next) => {
   const UserId = req.params.id;
-  const friends = await User.findById(UserId).populate({
-    path: "friends",
-    selec: "username profilePhoto",
-  });
+  const friends = await User.findById(UserId).populate("friends");
   res.status(200).json({
     status: "successful",
     data: friends,
