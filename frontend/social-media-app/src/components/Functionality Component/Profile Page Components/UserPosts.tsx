@@ -22,9 +22,11 @@ const UserPosts = ({ handleCreateNewPost }) => {
           Create a new post
         </button>{" "}
       </div>
-      {allUserPosts?.map((post) => (
-        <Post key={post.postId} Post={post} />
-      ))}
+      <div className="flex flex-col gap-5 mb-5">
+        {allUserPosts?.map((post) => (
+          <Post key={post.postId} Post={post} />
+        ))}
+      </div>
       <div>{loading ? <Loading></Loading> : ""}</div>
       {error && <p className="text-center text-red-500 mt-4">{error}</p>}
     </div>
