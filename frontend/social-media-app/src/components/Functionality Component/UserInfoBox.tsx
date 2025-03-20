@@ -1,26 +1,9 @@
+import PositionedSnackbar from "./Snackbar";
+
 import { useState } from "react";
 import { IUser } from "../../Typescript Types/userType";
-const handleFollow = async (userId: string, setError) => {
-  try {
-    const response = await fetch("/api/v1/friendReqs/createAFriendRequest", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        sender: localStorage.getItem("id"),
-        receiver: userId,
-      }),
-    });
-    const result = await response.json();
-    if (response.ok) console.log(result);
-  } catch (error) {
-    setError(error);
-  }
-};
 
 const UserInfoBox: React.FC<IUser> = ({ User }) => {
-  const [error, setError] = useState<string>("");
   const userId = User._id;
   return (
     <div>
@@ -40,15 +23,7 @@ const UserInfoBox: React.FC<IUser> = ({ User }) => {
           <div>
             <p>{User.bio}</p>
             <div className="card-actions justify-end">
-              <button
-                className="btn btn-primary"
-                onClick={() => handleFollow(userId, setError)}
-              >
-                Follow
-              </button>
-              {error ? (
-                <div>{"You have Already Sent A Friend Request!"}</div>
-              ) : null}
+              <PositionedSnackbar user={userId} />
             </div>
           </div>
         </div>

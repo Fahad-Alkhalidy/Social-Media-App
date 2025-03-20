@@ -49,6 +49,7 @@ const Profile: React.FC = () => {
         </div>
 
         {/* Center Section: User Profile and Modal */}
+        <div className="divider lg:divider-horizontal"></div>
         <div className="flex flex-col align-middle basis-1/3">
           <UserInfo />
 
@@ -90,6 +91,7 @@ const Profile: React.FC = () => {
             </div>
           )}
         </div>
+        <div className="divider lg:divider-horizontal"></div>
 
         {/* Right Section: Friend Requests */}
         <div className="basis-1/3">
