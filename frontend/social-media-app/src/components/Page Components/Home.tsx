@@ -147,9 +147,11 @@ const Home: React.FC = () => {
               />
               <div className="tab-content border-base-300 bg-base-300 max-h-150 overflow-y-scroll">
                 <div className="flex flex-col gap-5 mb-5 mt-5">
-                  {fetchFriendPosts?.map((post) => (
-                    <Post Post={post} key={post.postId}></Post>
-                  ))}
+                  <div className="items-to-center">
+                    {fetchFriendPosts?.map((post) => (
+                      <Post Post={post} key={post.postId}></Post>
+                    ))}
+                  </div>
                 </div>
               </div>
               <input
@@ -161,9 +163,11 @@ const Home: React.FC = () => {
               />
               <div className="tab-content border-base-300 bg-base-300 max-h-150 overflow-y-scroll">
                 <div className="flex flex-col gap-5 mb-5 mt-5">
-                  {fetchExplorePosts?.map((post) => (
-                    <Post Post={post} key={post.postId}></Post>
-                  ))}
+                  <div className="items-to-center">
+                    {fetchExplorePosts?.map((post) => (
+                      <Post Post={post} key={post.postId}></Post>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
