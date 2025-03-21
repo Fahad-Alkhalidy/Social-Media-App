@@ -1,10 +1,14 @@
 import PositionedSnackbar from "./Snackbar";
-
-import { useState } from "react";
 import { IUser } from "../../Typescript Types/userType";
+import Profile from "../Page Components/Profile";
+import { useNavigate } from "react-router-dom";
 
 const UserInfoBox: React.FC<IUser> = ({ User }) => {
+  const navigate = useNavigate();
   const userId = User._id;
+  const displayUserProfile = () => {
+    navigate(`/Profile/${userId}`);
+  };
   return (
     <div>
       <div className="card card-dash bg-base-100 w-96 hover:bg-gray-600">
@@ -24,6 +28,9 @@ const UserInfoBox: React.FC<IUser> = ({ User }) => {
             <p>{User.bio}</p>
             <div className="card-actions justify-end">
               <PositionedSnackbar user={userId} />
+              <button className="btn btn-primary" onClick={displayUserProfile}>
+                Discover
+              </button>
             </div>
           </div>
         </div>

@@ -5,7 +5,7 @@ import {
 } from "../Typescript Types/profileDataTypes";
 const controller = new AbortController();
 const signal = controller.signal;
-const useGetCurrentUser = () => {
+const useGetCurrentUser = (currentUser: string) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   //const [isDataFetched, setIsDataFetched] = useState<boolean>(false);
@@ -18,17 +18,14 @@ const useGetCurrentUser = () => {
     const fetchUserData = async () => {
       setLoading(true);
       try {
-        const response = await fetch(
-          `/api/v1/users/${localStorage.getItem("id")}`,
-          {
-            signal,
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              //authorization: `Bearer ${JWTToken}`,
-            },
-          }
-        );
+        const response = await fetch(`/api/v1/users/${currentUser}`, {
+          signal,
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            //authorization: `Bearer ${JWTToken}`,
+          },
+        });
         const result = await response.json();
         if (response.ok) {
           setProfileData(result.data.doc);
@@ -46,7 +43,7 @@ const useGetCurrentUser = () => {
       }
     };
     fetchUserData();
-  }, []);
+  }, [currentUser]);
   return { loading, error, profileData };
 };
 

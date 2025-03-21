@@ -7,11 +7,16 @@ import PagesDrawer from "../Functionality Component/Drawer";
 import { IPost } from "../../Typescript Types/postType";
 import Post from "../Functionality Component/Profile Page Components/Post";
 import { typographyClasses } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const Home: React.FC = () => {
   const [fetchedUsers, setFetchedUsers] = useState<[{ IUserType }]>();
   const [fetchFriendPosts, setFetchFriendPosts] = useState<IPost[]>();
   const [fetchExplorePosts, setFetchExplorePosts] = useState<IPost[]>();
+  const navigate = useNavigate();
+  const openUserProfile = () => {
+    navigate(`/profile/${localStorage.getItem("id")}`);
+  };
   useEffect(() => {
     const fetchFriendPosts = async () => {
       try {
@@ -112,10 +117,10 @@ const Home: React.FC = () => {
                 className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
               >
                 <li>
-                  <a className="justify-between" href="/profile">
+                  <button className="justify-between" onClick={openUserProfile}>
                     Profile
                     <span className="badge">New</span>
-                  </a>
+                  </button>
                 </li>
                 <li>
                   <a>Settings</a>

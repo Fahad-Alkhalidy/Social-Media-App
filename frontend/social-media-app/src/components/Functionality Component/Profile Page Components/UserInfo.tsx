@@ -6,8 +6,9 @@ import DriveFileRenameOutlineOutlinedIcon from "@mui/icons-material/DriveFileRen
 import SupervisorAccountOutlinedIcon from "@mui/icons-material/SupervisorAccountOutlined";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import UserInfoSkeleton from "./UserInfoSkeleton";
-const UserInfo = () => {
-  const { loading, error, profileData } = useGetCurrentUser();
+import ProfileProps from "../../../Typescript Types/profileProps";
+const UserInfo: React.FC<ProfileProps> = ({ currentUser }) => {
+  const { loading, error, profileData } = useGetCurrentUser(currentUser);
   return (
     <div>
       {loading ? (

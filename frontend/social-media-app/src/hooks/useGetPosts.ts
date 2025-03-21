@@ -4,7 +4,7 @@ import { IPost } from "../Typescript Types/postType";
 const controller = new AbortController();
 const signal = controller.signal;
 
-const useGetPosts = () => {
+const useGetPosts = (currentUser: string) => {
   const [allUserPosts, setAllUserPosts] = useState<IPost[]>();
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -12,10 +12,9 @@ const useGetPosts = () => {
     const fetchUserPosts = async () => {
       setLoading(true);
       try {
-        const response = await fetch(
-          `/api/v1/posts/${localStorage.getItem("id")}`,
-          { signal }
-        );
+        const response = await fetch(`/api/v1/posts/${currentUser}`, {
+          signal,
+        });
         const result = await response.json();
         if (response.ok) {
           setAllUserPosts(result.data.userPosts);
@@ -31,7 +30,7 @@ const useGetPosts = () => {
       }
     };
     fetchUserPosts();
-  }, []);
+  }, [currentUser]);
   return { allUserPosts, loading, error };
 };
 

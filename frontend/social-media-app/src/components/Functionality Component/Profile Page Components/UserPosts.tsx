@@ -3,8 +3,8 @@ import useGetPosts from "../../../hooks/useGetPosts";
 import Loading from "../Loading";
 import Post from "./Post";
 import DynamicFeedOutlinedIcon from "@mui/icons-material/DynamicFeedOutlined";
-const UserPosts = ({ handleCreateNewPost }) => {
-  const { loading, error, allUserPosts } = useGetPosts();
+const UserPosts = ({ handleCreateNewPost, currentUser }) => {
+  const { loading, error, allUserPosts } = useGetPosts(currentUser);
   const openDialog = () => {
     handleCreateNewPost((openCreateNewPost) => !openCreateNewPost);
   };

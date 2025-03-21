@@ -6,15 +6,14 @@ import UserPosts from "../Functionality Component/Profile Page Components/UserPo
 import UserInfo from "../Functionality Component/Profile Page Components/UserInfo";
 import UpdateForm from "../Functionality Component/Profile Page Components/UpdateForm";
 import FriendRequestContainer from "../Functionality Component/Profile Page Components/FriendRequestContainer";
-import useCreatePost from "../../hooks/useCreatePost";
 import CreatePostDialog from "../Functionality Component/Profile Page Components/CreatePostDialog";
+import ProfileProps from "../../Typescript Types/profileProps";
 
-const Profile: React.FC = () => {
+const Profile: React.FC<ProfileProps> = ({ currentUser }) => {
   const [openUpdateUserDataDialog, setUpdateUserDataDialog] =
     useState<boolean>(false);
   const [openCreateNewPostDialog, setCreateNewPostDialog] =
     useState<boolean>(false);
-  const [content, setContent] = useState<string>("");
   const navigate = useNavigate();
 
   // Handle back button navigation
@@ -45,13 +44,16 @@ const Profile: React.FC = () => {
       <div className="flex max-h-screen w-full">
         {/* Left Section: User Posts */}
         <div className="basis-1/3">
-          <UserPosts handleCreateNewPost={setCreateNewPostDialog} />
+          <UserPosts
+            handleCreateNewPost={setCreateNewPostDialog}
+            currentUser={currentUser}
+          />
         </div>
 
         {/* Center Section: User Profile and Modal */}
         <div className="divider lg:divider-horizontal"></div>
         <div className="flex flex-col align-middle basis-1/3">
-          <UserInfo />
+          <UserInfo currentUser={currentUser} />
 
           {/* Button to open the Update Form Modal */}
           <button
@@ -94,9 +96,11 @@ const Profile: React.FC = () => {
         <div className="divider lg:divider-horizontal"></div>
 
         {/* Right Section: Friend Requests */}
-        <div className="basis-1/3">
-          <FriendRequestContainer />
-        </div>
+        {currentUser === localStorage.getItem("id") ? (
+          <div className="basis-1/3">
+            <FriendRequestContainer />
+          </div>
+        ) : null}
       </div>
     </div>
   );
