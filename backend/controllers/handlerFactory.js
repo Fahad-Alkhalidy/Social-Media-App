@@ -49,6 +49,7 @@ exports.getAll = (Model, execlude) => {
 
 exports.createOne = (Model) => {
   return catchAsync(async (req, res, next) => {
+    req.body.user = req.user;
     const doc = await Model.create(req.body);
     res.status(201).json({
       status: "success",

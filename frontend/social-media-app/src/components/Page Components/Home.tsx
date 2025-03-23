@@ -8,11 +8,14 @@ import { IPost } from "../../Typescript Types/postType";
 import Post from "../Functionality Component/Profile Page Components/Post";
 import { typographyClasses } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import useGetCurrentUser from "../../hooks/useGetCurrentUser";
 
 const Home: React.FC = () => {
   const [fetchedUsers, setFetchedUsers] = useState<[{ IUserType }]>();
   const [fetchFriendPosts, setFetchFriendPosts] = useState<IPost[]>();
   const [fetchExplorePosts, setFetchExplorePosts] = useState<IPost[]>();
+  const currentUserId: string = localStorage.getItem("id");
+  const { profileData } = useGetCurrentUser(currentUserId);
   const navigate = useNavigate();
   const openUserProfile = () => {
     navigate(`/profile/${localStorage.getItem("id")}`);
@@ -108,7 +111,7 @@ const Home: React.FC = () => {
                 <div className="w-10 rounded-full">
                   <img
                     alt="Tailwind CSS Navbar component"
-                    src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                    src={`http://localhost:3000/image/users/${profileData.profilePicture}`}
                   />
                 </div>
               </div>

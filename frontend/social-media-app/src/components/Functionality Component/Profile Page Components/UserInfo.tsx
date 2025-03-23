@@ -1,5 +1,4 @@
 import useGetCurrentUser from "../../../hooks/useGetCurrentUser";
-import Loading from "../Loading";
 import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import DriveFileRenameOutlineOutlinedIcon from "@mui/icons-material/DriveFileRenameOutlineOutlined";

@@ -13,7 +13,7 @@ const CommentSchema = new mongoose.Schema({
   },
   content: {
     type: String,
-    required: true,
+    required: [true, "the comment must contain a content"],
   },
   likes: [
     {

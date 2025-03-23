@@ -1,13 +1,17 @@
+import "../../../Styling/App.css";
 import { useState } from "react";
 import { IPostType } from "../../../Typescript Types/postType";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import useGetCurrentUser from "../../../hooks/useGetCurrentUser";
+import CustomizedDialogs from "../CommentSection";
 const Post: React.FC<IPostType> = ({ Post }) => {
   const [like, setLike] = useState<boolean>(false);
+  const userId: string = Post.user;
+  const { profileData } = useGetCurrentUser(userId);
   const handleLike = () => {
     setLike((like: boolean) => !like);
   };
-  console.log(Post);
 
   return (
     <div>
@@ -17,7 +21,7 @@ const Post: React.FC<IPostType> = ({ Post }) => {
             className="rounded-full border-4 border-indigo-600"
             height={60}
             width={60}
-            src={`http://localhost:3000/image/users/${Post.user.profilePicture}`}
+            src={`http://localhost:3000/image/users/${profileData.profilePicture}`}
             alt="Profile"
           />
           <h2 className="card-title ml-4 text-2xl">@{Post.user.username}</h2>
@@ -46,6 +50,7 @@ const Post: React.FC<IPostType> = ({ Post }) => {
               )}
             </button>
           </div>
+          <CustomizedDialogs></CustomizedDialogs>
         </div>
       </div>
     </div>
