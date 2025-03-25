@@ -9,6 +9,8 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
 import CreateComment from "./CreateCommentDialog";
+import useGetPostComments from "../../hooks/useGetPostComments";
+import Comment from "./Comment";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -18,10 +20,17 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     padding: theme.spacing(1),
   },
 }));
-
-export default function CustomizedDialogs() {
+interface commentSectionProps {
+  postId: string;
+}
+export default function CustomizedDialogs({ postId }: commentSectionProps) {
+  console.log(postId);
   const [open, setOpen] = React.useState(false);
+  const { loading, error, allComments, fetchComments } = useGetPostComments();
 
+  React.useEffect(() => {
+    fetchComments(postId);
+  }, []);
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -55,10 +64,14 @@ export default function CustomizedDialogs() {
           <CloseIcon />
         </IconButton>
         <DialogContent dividers className="w-140 h-92">
-          <Typography gutterBottom>Be The First To Comment!</Typography>
+          {allComments ? (
+            allComments.map((comment) => <Comment comment={comment}></Comment>)
+          ) : (
+            <Typography gutterBottom>Be The First To Comment!</Typography>
+          )}
         </DialogContent>
         <DialogActions>
-          <CreateComment></CreateComment>
+          <CreateComment postId={postId}></CreateComment>
           <Button autoFocus onClick={handleClose}>
             Save changes
           </Button>

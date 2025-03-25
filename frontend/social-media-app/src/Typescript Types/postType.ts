@@ -1,7 +1,7 @@
 import { IUserType } from "./userType";
 
 export interface IPost {
-  postId: string;
+  _id: string;
   user: IUserType;
   content: string;
   media: string;

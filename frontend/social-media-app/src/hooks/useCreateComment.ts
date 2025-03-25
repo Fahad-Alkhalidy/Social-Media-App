@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { IComment } from "../Typescript Types/commentTypes";
 
 const useCreateComment = () => {
   const controller = new AbortController();
@@ -6,7 +7,7 @@ const useCreateComment = () => {
 
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-  const createNewComment = async (commentContent) => {
+  const createNewComment = async (commentContent: IComment) => {
     setLoading(true);
     try {
       const response = await fetch("/api/v1/comments/createNewComment", {
@@ -15,7 +16,10 @@ const useCreateComment = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(commentContent),
+        body: JSON.stringify({
+          postId: commentContent.postId,
+          content: commentContent.content,
+        }),
       });
       if (!response.ok) setError("Error Occured");
     } catch (error) {

@@ -5,3 +5,4 @@ const router = express.Router();
 module.exports = router;
 router.use(authController.protect);
 router.route("/createNewComment").post(commentController.createComment);
+router.route("/:id").get(commentController.getComments);

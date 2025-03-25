@@ -50,7 +50,7 @@ const Post: React.FC<IPostType> = ({ Post }) => {
               )}
             </button>
           </div>
-          <CustomizedDialogs></CustomizedDialogs>
+          <CustomizedDialogs postId={Post._id}></CustomizedDialogs>
         </div>
       </div>
     </div>
